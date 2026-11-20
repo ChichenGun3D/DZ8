@@ -95,8 +95,15 @@ class Program
     static void Main()
     {
         BankAccount acc = new BankAccount(1000, "Депозитный");
-        acc.Deposit(500);
-        acc.Withdraw(200);
+
+        Console.Write("Введите сумму для пополнения: ");
+        double depositAmount = Convert.ToDouble(Console.ReadLine());
+        acc.Deposit(depositAmount);
+
+        Console.Write("Введите сумму для снятия: ");
+        double withdrawAmount = Convert.ToDouble(Console.ReadLine());
+        acc.Withdraw(withdrawAmount);
+
         acc.PrintInfo();
     }
 }
