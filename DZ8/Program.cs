@@ -1,10 +1,34 @@
 ﻿using System;
+using System.Collections;
+
+public class BankTransaction
+{
+    private readonly DateTime dateTime;
+    private readonly double amount;
+
+    public BankTransaction(double amount)
+    {
+        this.dateTime = DateTime.Now;
+        this.amount = amount;
+    }
+
+    public DateTime DateTime
+    {
+        get { return dateTime; }
+    }
+
+    public double Amount
+    {
+        get { return amount; }
+    }
+}
 
 public class BankAccount
 {
     private string accountNumber;
     private double balance;
     private string accountType;
+    private Queue transactions;
     private static int counter = 1000;
 
     private void GenerateAccountNumber()
@@ -18,6 +42,7 @@ public class BankAccount
         GenerateAccountNumber();
         balance = 0;
         accountType = "Не указан";
+        transactions = new Queue();
     }
 
     public BankAccount(double balance)
@@ -25,6 +50,7 @@ public class BankAccount
         GenerateAccountNumber();
         this.balance = balance;
         accountType = "Не указан";
+        transactions = new Queue();
     }
 
     public BankAccount(string accountType)
@@ -32,6 +58,7 @@ public class BankAccount
         GenerateAccountNumber();
         this.balance = 0;
         this.accountType = accountType;
+        transactions = new Queue();
     }
 
     public BankAccount(double balance, string accountType)
@@ -39,6 +66,19 @@ public class BankAccount
         GenerateAccountNumber();
         this.balance = balance;
         this.accountType = accountType;
+        transactions = new Queue();
+    }
+
+    public void Deposit(double amount)
+    {
+        balance += amount;
+        transactions.Enqueue(new BankTransaction(amount));
+    }
+
+    public void Withdraw(double amount)
+    {
+        balance -= amount;
+        transactions.Enqueue(new BankTransaction(-amount));
     }
 
     public void PrintInfo()
@@ -54,14 +94,9 @@ class Program
 {
     static void Main()
     {
-        BankAccount acc1 = new BankAccount();
-        BankAccount acc2 = new BankAccount(1500.50);
-        BankAccount acc3 = new BankAccount("Депозитный");
-        BankAccount acc4 = new BankAccount(2500.00, "Кредитный");
-
-        acc1.PrintInfo();
-        acc2.PrintInfo();
-        acc3.PrintInfo();
-        acc4.PrintInfo();
+        BankAccount acc = new BankAccount(1000, "Депозитный");
+        acc.Deposit(500);
+        acc.Withdraw(200);
+        acc.PrintInfo();
     }
 }
